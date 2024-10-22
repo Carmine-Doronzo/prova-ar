@@ -118,7 +118,7 @@ export default {
           position="0 0 0"> <!-- Posizione relativa al marker -->
         </a-entity>
       </a-marker>
-      <a-entity camera position="0 0 0"></a-entity>
+      <!-- <a-entity camera position="0 0 0"></a-entity> -->
     </a-scene>
   </div>
 </template>
