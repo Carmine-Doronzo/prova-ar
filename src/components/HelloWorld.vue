@@ -46,6 +46,8 @@ export default {
       // Evento per il tocco
       controller.addEventListener('selectstart', this.onSelectStart);
       controller.addEventListener('selectend', this.onSelectEnd);
+      controller.addEventListener('squeezestart', this.onSqueezeStart); // Gestisce l'inizio della pressione
+      controller.addEventListener('squeezeend', this.onSqueezeEnd); // Gestisce la fine della pressione
 
       // Ciclo di rendering
       const animate = () => {
@@ -63,19 +65,37 @@ export default {
         // Posiziona il modello alla posizione del controller
         this.mesh.position.copy(controller.position);
         this.mesh.visible = true; // Mostra il modello
-
-        // Riduci le dimensioni dell'oggetto
-        const scaleFactor = 0.9; // Fattore di riduzione (10% in meno)
-        this.mesh.scale.set(
-          this.mesh.scale.x * scaleFactor,
-          this.mesh.scale.y * scaleFactor,
-          this.mesh.scale.z * scaleFactor
-        );
       }
     },
 
-    onSelectEnd(event) {
-      // Gestisci l'evento di rilascio se necessario
+    onSqueezeStart(event) {
+      this.isSqueezing = true; // Flag per tenere traccia dello stato di pressione
+    },
+
+    onSqueezeEnd(event) {
+      this.isSqueezing = false; // Ripristina il flag
+    },
+
+    updateModelScale() {
+      if (this.isSqueezing) {
+        // Avvicina il modello
+        this.mesh.scale.multiplyScalar(0.95); // Riduci la scala del modello
+      } else {
+        // Allontana il modello
+        this.mesh.scale.multiplyScalar(1.05); // Aumenta la scala del modello
+      }
+    },
+
+    animate() {
+      // Ciclo di rendering
+      const animate = () => {
+        requestAnimationFrame(animate);
+        if (this.isSqueezing) {
+          this.updateModelScale(); // Aggiorna la scala mentre si preme
+        }
+        renderer.render(scene, camera);
+      };
+      animate();
     },
   },
 };
