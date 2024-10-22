@@ -4,7 +4,7 @@
 
 <script>
 import * as THREE from 'three';
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
 
 export default {
@@ -33,19 +33,20 @@ export default {
       light.position.set(1, 1, 1).normalize();
       scene.add(light);
 
-      // Carica il modello STL
-      const loader = new STLLoader();
-      loader.load('/watchstand_newV.stl', (geometry) => {
-        const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
-        this.mesh = new THREE.Mesh(geometry, material);
+      // Carica il modello GLB
+      const loader = new GLTFLoader();
+      loader.load('/watchstand_newV.glb', (gltf) => {
+        this.mesh = gltf.scene; // Il modello caricato è contenuto in gltf.scene
 
         // Riduci le dimensioni del modello alla grandezza di una bottiglia
-        this.mesh.scale.set(0.01, 0.01, 0.01); // Dimensione simile a una bottiglia
+        this.mesh.scale.set(0.03, 0.03, 0.03); // Dimensione simile a una bottiglia, ridotta
         this.mesh.visible = false; // Inizialmente nascosto
 
         // Posiziona il modello lontano dalla telecamera
-        this.mesh.position.set(0, 0, -10); // Posizione iniziale lontana dalla telecamera
+        this.mesh.position.set(0, 0, -5); // Posizione iniziale a 5 metri dalla telecamera
         scene.add(this.mesh);
+      }, undefined, (error) => {
+        console.error('Errore nel caricamento del modello GLB:', error);
       });
 
       // Imposta il rendering e la gestione degli eventi
