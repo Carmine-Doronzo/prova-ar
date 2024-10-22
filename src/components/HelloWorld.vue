@@ -12,13 +12,6 @@ export default {
   mounted() {
     this.initAR();
   },
-  data() {
-    return {
-      isDragging: false, // Flag per tenere traccia dello stato di trascinamento
-      isSqueezing: false, // Flag per il squeeze
-      mesh: null, // Il modello 3D caricato
-    };
-  },
   methods: {
     initAR() {
       const scene = new THREE.Scene();
@@ -39,12 +32,10 @@ export default {
         const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
         this.mesh = new THREE.Mesh(geometry, material);
 
-        // Riduci le dimensioni del modello alla grandezza di una bottiglia
-        this.mesh.scale.set(0.05, 0.2, 0.05); // Dimensione simile a una bottiglia
+        // Riduci le dimensioni del modello
+        this.mesh.scale.set(0.01, 0.01, 0.01); // Dimensione iniziale
         this.mesh.visible = false; // Inizialmente nascosto
-
-        // Posiziona il modello lontano dalla telecamera
-        this.mesh.position.set(0, 0, -3); // Posizione iniziale lontana dalla telecamera
+        this.mesh.position.set(0, 0, -3);
         scene.add(this.mesh);
       });
 
@@ -56,9 +47,8 @@ export default {
       // Evento per il tocco
       controller.addEventListener('selectstart', this.onSelectStart);
       controller.addEventListener('selectend', this.onSelectEnd);
-      controller.addEventListener('squeezestart', this.onSqueezeStart);
-      controller.addEventListener('squeezeend', this.onSqueezeEnd);
-      controller.addEventListener('selectmove', this.onSelectMove); // Aggiunto per il movimento
+      controller.addEventListener('squeezestart', this.onSqueezeStart); // Gestisce l'inizio della pressione
+      controller.addEventListener('squeezeend', this.onSqueezeEnd); // Gestisce la fine della pressione
 
       // Ciclo di rendering
       const animate = () => {
@@ -76,12 +66,7 @@ export default {
         // Posiziona il modello alla posizione del controller
         this.mesh.position.copy(controller.position);
         this.mesh.visible = true; // Mostra il modello
-        this.isDragging = true; // Inizia il trascinamento
       }
-    },
-
-    onSelectEnd(event) {
-      this.isDragging = false; // Ferma il trascinamento
     },
 
     onSqueezeStart(event) {
@@ -92,27 +77,26 @@ export default {
       this.isSqueezing = false; // Ripristina il flag
     },
 
-    onSelectMove(event) {
-      if (this.isDragging && this.mesh) {
-        const controller = event.target;
-
-        // Calcola la nuova posizione del modello in base alla posizione del controller
-        this.mesh.position.copy(controller.position);
-        
-        // Limita il movimento dell'oggetto a un'area di 1000 metri
-        const maxDistance = 10; // Distanza massima in metri
-        this.mesh.position.x = THREE.MathUtils.clamp(this.mesh.position.x, -maxDistance, maxDistance);
-        this.mesh.position.y = THREE.MathUtils.clamp(this.mesh.position.y, -maxDistance, maxDistance);
-        this.mesh.position.z = THREE.MathUtils.clamp(this.mesh.position.z, -maxDistance, maxDistance);
+    updateModelScale() {
+      if (this.isSqueezing) {
+        // Avvicina il modello
+        this.mesh.scale.multiplyScalar(0.95); // Riduci la scala del modello
+      } else {
+        // Allontana il modello
+        this.mesh.scale.multiplyScalar(1.05); // Aumenta la scala del modello
       }
     },
 
-    updateModelScale() {
-      if (this.isSqueezing) {
-        this.mesh.scale.multiplyScalar(0.95); // Riduci la scala del modello
-      } else {
-        this.mesh.scale.multiplyScalar(1.05); // Aumenta la scala del modello
-      }
+    animate() {
+      // Ciclo di rendering
+      const animate = () => {
+        requestAnimationFrame(animate);
+        if (this.isSqueezing) {
+          this.updateModelScale(); // Aggiorna la scala mentre si preme
+        }
+        renderer.render(scene, camera);
+      };
+      animate();
     },
   },
 };
