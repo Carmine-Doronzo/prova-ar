@@ -111,7 +111,7 @@ export default {
   <div>
     <a-scene embedded arjs>
       <!-- Posizioniamo il marker a 200 metri di distanza rispetto alla camera -->
-      <a-marker preset="hiro" position="0 0 -200">
+      <a-marker preset="/pattern-marker.patt" position="0 0 -200">
         <a-entity 
           gltf-model="/watchstand_newV.glb" 
           scale="0.005 0.005 0.005" 
