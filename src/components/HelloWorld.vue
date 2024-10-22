@@ -39,9 +39,12 @@ export default {
         const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
         this.mesh = new THREE.Mesh(geometry, material);
 
-        // Riduci le dimensioni del modello
-        this.mesh.scale.set(0.1, 0.1, 0.1); // Dimensione iniziale
+        // Riduci le dimensioni del modello alla grandezza di una bottiglia
+        this.mesh.scale.set(0.05, 0.2, 0.05); // Dimensione simile a una bottiglia
         this.mesh.visible = false; // Inizialmente nascosto
+
+        // Posiziona il modello lontano dalla telecamera
+        this.mesh.position.set(0, 0, -3); // Posizione iniziale lontana dalla telecamera
         scene.add(this.mesh);
       });
 
