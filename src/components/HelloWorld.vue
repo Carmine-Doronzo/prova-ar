@@ -35,7 +35,7 @@ export default {
         // Riduci le dimensioni del modello
         this.mesh.scale.set(0.01, 0.01, 0.01); // Dimensione iniziale
         this.mesh.visible = false; // Inizialmente nascosto
-        this.mesh.position.set(0, 0, -3);
+        this.mesh.position.set(0, 0, -10);
         scene.add(this.mesh);
       });
 
