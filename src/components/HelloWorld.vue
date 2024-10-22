@@ -33,8 +33,7 @@ export default {
         this.mesh = new THREE.Mesh(geometry, material);
 
         // Riduci le dimensioni del modello
-        this.mesh.scale.set(0.1, 0.1, 0.1); // Modifica i valori per scalare il modello
-
+        this.mesh.scale.set(0.1, 0.1, 0.1); // Dimensione iniziale
         this.mesh.visible = false; // Inizialmente nascosto
         scene.add(this.mesh);
       });
@@ -64,6 +63,14 @@ export default {
         // Posiziona il modello alla posizione del controller
         this.mesh.position.copy(controller.position);
         this.mesh.visible = true; // Mostra il modello
+
+        // Riduci le dimensioni dell'oggetto
+        const scaleFactor = 0.9; // Fattore di riduzione (10% in meno)
+        this.mesh.scale.set(
+          this.mesh.scale.x * scaleFactor,
+          this.mesh.scale.y * scaleFactor,
+          this.mesh.scale.z * scaleFactor
+        );
       }
     },
 
