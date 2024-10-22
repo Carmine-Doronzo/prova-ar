@@ -31,6 +31,10 @@ export default {
       loader.load('/watchstand_newV.stl', (geometry) => {
         const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
         this.mesh = new THREE.Mesh(geometry, material);
+
+        // Riduci le dimensioni del modello
+        this.mesh.scale.set(0.1, 0.1, 0.1); // Modifica i valori per scalare il modello
+
         this.mesh.visible = false; // Inizialmente nascosto
         scene.add(this.mesh);
       });
