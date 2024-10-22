@@ -113,7 +113,7 @@ export default {
       <a-marker preset="hiro">
         <a-entity 
           gltf-model="/watchstand_newV.glb" 
-          scale="0.005 0.005 0.005" <!-- Ridotto ulteriormente -->
+          scale="0.005 0.005 0.005" 
           position="0 0 -200"> <!-- Posizione a 200 metri -->
         </a-entity>
       </a-marker>
