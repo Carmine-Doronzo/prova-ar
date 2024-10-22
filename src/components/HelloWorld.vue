@@ -114,7 +114,7 @@ export default {
         <a-entity 
           gltf-model="/watchstand_newV.glb" 
           scale="0.01 0.01 0.01" 
-          position="0 0 5000">
+          position="0 0 -500">
         </a-entity>
       </a-marker>
       <a-entity camera></a-entity>
