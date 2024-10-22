@@ -42,7 +42,7 @@ export default {
         this.mesh.visible = false; // Inizialmente nascosto
 
         // Posiziona il modello lontano dalla telecamera
-        this.mesh.position.set(0, 0, 2500); // Posizione iniziale a 5 metri dalla telecamera
+        this.mesh.position.set(0, 0, -200); // Posizione iniziale a 5 metri dalla telecamera
         scene.add(this.mesh);
       }, undefined, (error) => {
         console.error('Errore nel caricamento del modello GLB:', error);
