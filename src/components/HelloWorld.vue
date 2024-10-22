@@ -113,8 +113,8 @@ export default {
       <a-marker preset="hiro">
         <a-entity 
           gltf-model="/watchstand_newV.glb" 
-          scale="0.01 0.01 0.01" 
-          position="0 0 -500">
+          scale="0.005 0.005 0.005" <!-- Ridotto ulteriormente -->
+          position="0 0 -200"> <!-- Posizione a 200 metri -->
         </a-entity>
       </a-marker>
       <a-entity camera></a-entity>
@@ -135,6 +135,7 @@ html, body {
 }
 a-scene {
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 </style>
+
