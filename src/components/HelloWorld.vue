@@ -40,11 +40,11 @@ export default {
         this.mesh = new THREE.Mesh(geometry, material);
 
         // Riduci le dimensioni del modello alla grandezza di una bottiglia
-        this.mesh.scale.set(0.05, 0.2, 0.05); // Dimensione simile a una bottiglia
+        this.mesh.scale.set(0.01, 0.01, 0.01); // Dimensione simile a una bottiglia
         this.mesh.visible = false; // Inizialmente nascosto
 
         // Posiziona il modello lontano dalla telecamera
-        this.mesh.position.set(0, 0, -3); // Posizione iniziale lontana dalla telecamera
+        this.mesh.position.set(0, 0, -10); // Posizione iniziale lontana dalla telecamera
         scene.add(this.mesh);
       });
 
