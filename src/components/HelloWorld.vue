@@ -110,14 +110,15 @@ export default {
 <template>
   <div>
     <a-scene embedded arjs>
-      <a-marker preset="hiro">
+      <!-- Posizioniamo il marker a 200 metri di distanza rispetto alla camera -->
+      <a-marker preset="hiro" position="0 0 -200">
         <a-entity 
           gltf-model="/watchstand_newV.glb" 
           scale="0.005 0.005 0.005" 
-          position="0 0 -200"> <!-- Posizione a 200 metri -->
+          position="0 0 0"> <!-- Posizione relativa al marker -->
         </a-entity>
       </a-marker>
-      <a-entity camera></a-entity>
+      <a-entity camera position="0 0 0"></a-entity>
     </a-scene>
   </div>
 </template>
@@ -138,4 +139,5 @@ a-scene {
   height: 100vh;
 }
 </style>
+
 
