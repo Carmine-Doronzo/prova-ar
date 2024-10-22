@@ -139,7 +139,7 @@ export default {
 
       // Carica il modello STL
       const loader = new STLLoader();
-      loader.load('/watchstand_newV.stl', (geometry) => {
+      loader.load('/skull_mug.stl', (geometry) => {
         const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
         this.mesh = new THREE.Mesh(geometry, material);
 
