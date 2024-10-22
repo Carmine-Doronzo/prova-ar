@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div ref="arContainer" class="ar-container"></div>
 </template>
 
@@ -105,5 +105,36 @@ export default {
   width: 100%;
   height: 100vh;
   background-color: #000;
+}
+</style> -->
+<template>
+  <div>
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <a-entity 
+          gltf-model="/watchstand_newV.glb" 
+          scale="0.01 0.01 0.01" 
+          position="0 0 0">
+        </a-entity>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ARComponent',
+};
+</script>
+
+<style>
+html, body {
+  margin: 0;
+  overflow: hidden;
+}
+a-scene {
+  width: 100%;
+  height: 100vh;
 }
 </style>
