@@ -100,7 +100,7 @@ export default {
         this.mesh.position.copy(controller.position);
         
         // Limita il movimento dell'oggetto a un'area di 1000 metri
-        const maxDistance = 1000; // Distanza massima in metri
+        const maxDistance = 10; // Distanza massima in metri
         this.mesh.position.x = THREE.MathUtils.clamp(this.mesh.position.x, -maxDistance, maxDistance);
         this.mesh.position.y = THREE.MathUtils.clamp(this.mesh.position.y, -maxDistance, maxDistance);
         this.mesh.position.z = THREE.MathUtils.clamp(this.mesh.position.z, -maxDistance, maxDistance);
