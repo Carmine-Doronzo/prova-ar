@@ -33,7 +33,7 @@ export default {
         this.mesh = new THREE.Mesh(geometry, material);
 
         // Riduci le dimensioni del modello
-        this.mesh.scale.set(0.01, 0.01, 0.01); // Dimensione iniziale
+        this.mesh.scale.set(0.001, 0.001, 0.001); // Dimensione iniziale
         this.mesh.visible = false; // Inizialmente nascosto
         this.mesh.position.set(0, 0, -10);
         scene.add(this.mesh);
@@ -80,10 +80,10 @@ export default {
     updateModelScale() {
       if (this.isSqueezing) {
         // Avvicina il modello
-        this.mesh.scale.multiplyScalar(0.95); // Riduci la scala del modello
+        this.mesh.scale.multiplyScalar(0.05); // Riduci la scala del modello
       } else {
         // Allontana il modello
-        this.mesh.scale.multiplyScalar(1.05); // Aumenta la scala del modello
+        this.mesh.scale.multiplyScalar(0.1); // Aumenta la scala del modello
       }
     },
 
