@@ -33,8 +33,7 @@ export default {
         this.mesh = new THREE.Mesh(geometry, material);
 
         // Riduci le dimensioni del modello
-        this.mesh.scale.set(0.1, 0.1, 0.1); // Modifica i valori per scalare il modello
-
+        this.mesh.scale.set(0.1, 0.1, 0.1); // Dimensione iniziale
         this.mesh.visible = false; // Inizialmente nascosto
         scene.add(this.mesh);
       });
@@ -47,6 +46,8 @@ export default {
       // Evento per il tocco
       controller.addEventListener('selectstart', this.onSelectStart);
       controller.addEventListener('selectend', this.onSelectEnd);
+      controller.addEventListener('squeezestart', this.onSqueezeStart); // Gestisce l'inizio della pressione
+      controller.addEventListener('squeezeend', this.onSqueezeEnd); // Gestisce la fine della pressione
 
       // Ciclo di rendering
       const animate = () => {
@@ -67,8 +68,34 @@ export default {
       }
     },
 
-    onSelectEnd(event) {
-      // Gestisci l'evento di rilascio se necessario
+    onSqueezeStart(event) {
+      this.isSqueezing = true; // Flag per tenere traccia dello stato di pressione
+    },
+
+    onSqueezeEnd(event) {
+      this.isSqueezing = false; // Ripristina il flag
+    },
+
+    updateModelScale() {
+      if (this.isSqueezing) {
+        // Avvicina il modello
+        this.mesh.scale.multiplyScalar(0.95); // Riduci la scala del modello
+      } else {
+        // Allontana il modello
+        this.mesh.scale.multiplyScalar(1.05); // Aumenta la scala del modello
+      }
+    },
+
+    animate() {
+      // Ciclo di rendering
+      const animate = () => {
+        requestAnimationFrame(animate);
+        if (this.isSqueezing) {
+          this.updateModelScale(); // Aggiorna la scala mentre si preme
+        }
+        renderer.render(scene, camera);
+      };
+      animate();
     },
   },
 };
