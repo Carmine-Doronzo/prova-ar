@@ -11,35 +11,35 @@ export default {
   name: 'ARComponent',
 
   mounted() {
-    this.initAR()
-    // if (this.isChromeOnAndroid()) {
-    //   this.initAR(); // Utilizza WebXR per i browser compatibili
-    // } else if (this.isIOS()) {
-    //   this.initAR(); // Fallback per Safari iOS
-    // } else {
-    //   console.warn
-    //     ('AR non supportato su questo browser.');
-    // }
+    // this.initAR()
+    if (this.isChromeOnAndroid()) {
+      this.initAR(); // Utilizza WebXR per i browser compatibili
+    } else if (this.isIOS()) {
+      this.showARQuickLook(); // Fallback per Safari iOS
+    } else {
+      console.warn
+        ('AR non supportato su questo browser.');
+    }
   },
   methods: {
-    // isIOS() {
-    //   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    // },
-    // isChromeOnAndroid() {
-    //   const userAgent = navigator.userAgent.toLowerCase();
-    //   const isAndroid = userAgent.includes("android");
-    //   const isChrome = userAgent.includes("chrome") && !userAgent.includes("edg"); // Esclude Edge che può usare lo stesso user agent
-    //   return isAndroid && isChrome;
-    // },
-    // showARQuickLook() {
-    //   const usdzLink = '/skull-mug.usdz'; // Percorso del file .usdz
-    //   const anchor = document.createElement('a');
-    //   anchor.setAttribute('rel', 'ar');
-    //   anchor.setAttribute('href', usdzLink);
-    //   anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
-    //   document.body.appendChild(anchor);
-    //   anchor.click(); // Simula un clic per avviare l'AR
-    // },
+    isIOS() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    },
+    isChromeOnAndroid() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isAndroid = userAgent.includes("android");
+      const isChrome = userAgent.includes("chrome") && !userAgent.includes("edg"); // Esclude Edge che può usare lo stesso user agent
+      return isAndroid && isChrome;
+    },
+    showARQuickLook() {
+      const usdzLink = '/skull-mug.usdz'; // Percorso del file .usdz
+      const anchor = document.createElement('a');
+      anchor.setAttribute('rel', 'ar');
+      anchor.setAttribute('href', usdzLink);
+      anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
+      document.body.appendChild(anchor);
+      anchor.click(); // Simula un clic per avviare l'AR
+    },
 
     initAR() {
       const scene = new THREE.Scene();
