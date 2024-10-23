@@ -19,7 +19,7 @@ export default {
   },
   mounted() {
     if (this.isChromeOnAndroid()) {
-      this.initAR(); // Utilizza WebXR per i browser compatibili
+      this.showARQuickLook(); // Utilizza WebXR per i browser compatibili
     } else if (this.isIOS()) {
       this.showARQuickLook(); // Fallback per Safari iOS
     } else {
@@ -141,7 +141,7 @@ export default {
 <style>
 .ar-container1 {
   width: 100%;
-  height: 30vh;
+  height: 100vh;
   background-color: #000;
   position: relative;
 }
