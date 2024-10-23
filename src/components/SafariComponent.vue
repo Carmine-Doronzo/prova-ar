@@ -19,9 +19,9 @@ export default {
   },
   mounted() {
     if (this.isChromeOnAndroid()) {
-      this.showARQuickLook(); // Utilizza WebXR per i browser compatibili
+      this.initAR(); // Utilizza WebXR per i browser compatibili
     } else if (this.isIOS()) {
-      this.showARQuickLook(); // Fallback per Safari iOS
+      this.initAR(); // Fallback per Safari iOS
     } else {
       console.warn
         ('AR non supportato su questo browser.');
@@ -37,15 +37,15 @@ export default {
       const isChrome = userAgent.includes("chrome") && !userAgent.includes("edg"); // Esclude Edge che può usare lo stesso user agent
       return isAndroid && isChrome;
     },
-    showARQuickLook() {
-      const usdzLink = '/skull-mug.usdz'; // Percorso del file .usdz
-      const anchor = document.createElement('a');
-      anchor.setAttribute('rel', 'ar');
-      anchor.setAttribute('href', usdzLink);
-      anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
-      document.body.appendChild(anchor);
-      anchor.click(); // Simula un clic per avviare l'AR
-    },
+    // showARQuickLook() {
+    //   const usdzLink = '/skull-mug.usdz'; // Percorso del file .usdz
+    //   const anchor = document.createElement('a');
+    //   anchor.setAttribute('rel', 'ar');
+    //   anchor.setAttribute('href', usdzLink);
+    //   anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
+    //   document.body.appendChild(anchor);
+    //   anchor.click(); // Simula un clic per avviare l'AR
+    // },
 
     initAR() {
       const scene = new THREE.Scene();
