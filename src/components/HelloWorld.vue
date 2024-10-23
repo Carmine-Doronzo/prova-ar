@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div ref="arContainer" class="ar-container"></div>
   <div v-if="!isMobile" ref="canvasContainer" class="canvas-container"></div>
 </template>
@@ -147,5 +147,54 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
+}
+</style> -->
+<template>
+  <div ref="arContainer" class="ar-container">
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <a-entity id="stlModel" :scale="modelScale" :position="modelPosition" :rotation="modelRotation"></a-entity>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+  </div>
+</template>
+
+<script>
+import 'aframe';
+import 'ar.js/aframe/build/aframe-ar.js'; // Importa AR.js come modulo
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'; // Importa STLLoader
+
+export default {
+  name: 'ARComponent',
+  data() {
+    return {
+      modelScale: '0.001 0.001 0.001', // Scala ridotta del modello
+      modelPosition: '0 0 0',
+      modelRotation: '0 0 0',
+    };
+  },
+  mounted() {
+    this.loadSTLModel('/skull_mug.stl'); // Percorso del tuo file STL
+  },
+  methods: {
+    loadSTLModel(url) {
+      const loader = new STLLoader();
+      loader.load(url, (geometry) => {
+        const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.scale.set(0.001, 0.001, 0.001); // Scala il modello
+        this.$refs.arContainer.appendChild(mesh); // Aggiungi il modello alla scena
+      });
+    },
+  },
+};
+</script>
+
+<style>
+.ar-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #000;
 }
 </style>
