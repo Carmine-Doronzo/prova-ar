@@ -13,12 +13,33 @@ export default {
     return {
       mesh: null,
       isSqueezing: false,
+      initialPosition: null,
+      initialRotation: null,
     };
   },
   mounted() {
-    this.initAR(); // Inizializza AR senza AR Quick Look
+    if (window.navigator.xr) {
+      this.initAR(); // Utilizza WebXR per i browser compatibili
+    } else if (this.isIOS()) {
+      this.showARQuickLook(); // Fallback per Safari iOS
+    } else {
+      alert('AR non supportato su questo browser.');
+    }
   },
   methods: {
+    isIOS() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    },
+    showARQuickLook() {
+      const usdzLink = '/skull_mug.usdz'; // Percorso del file .usdz
+      const anchor = document.createElement('a');
+      anchor.setAttribute('rel', 'ar');
+      anchor.setAttribute('href', usdzLink);
+      anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
+      document.body.appendChild(anchor);
+      anchor.click(); // Simula un clic per avviare l'AR
+    },
+    
     initAR() {
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -37,7 +58,8 @@ export default {
         const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.scale.set(0.001, 0.001, 0.001);
-        this.mesh.position.set(0, 0, -1);
+        this.mesh.visible = false;
+        this.mesh.position.set(0, 0, -10);
         scene.add(this.mesh);
       });
 
@@ -62,38 +84,8 @@ export default {
       };
       animate();
     },
-
-    onSelectStart() {
-      if (this.mesh) {
-        this.mesh.visible = true; // Rende il modello visibile quando selezionato
-      }
-    },
     
-    onSelectEnd() {
-      if (this.mesh) {
-        this.mesh.visible = false; // Nasconde il modello quando deselezionato
-      }
-    },
-    
-    onSqueezeStart() {
-      this.isSqueezing = true;
-    },
-
-    onSqueezeEnd() {
-      this.isSqueezing = false;
-    },
-
-    updateModelScale() {
-      // Implementa la logica per aggiornare la scala del modello qui
-    },
-
-    updateModelPosition(controller) {
-      // Implementa la logica per aggiornare la posizione del modello qui
-    },
-
-    updateModelRotation(controller) {
-      // Implementa la logica per aggiornare la rotazione del modello qui
-    },
+    // Altri metodi come onSelectStart, updateModelPosition, updateModelRotation, ecc.
   },
 };
 </script>
@@ -104,5 +96,12 @@ export default {
   height: 100vh;
   background-color: #000;
   position: relative;
+}
+
+.ar-container a[rel="ar"] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
 }
 </style>
