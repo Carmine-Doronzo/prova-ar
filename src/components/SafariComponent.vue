@@ -1,5 +1,5 @@
 <template>
-  <div ref="arContainer1" class="ar-container1"></div>
+  <div ref="arContainer" class="ar-container"></div>
 </template>
 
 <script>
@@ -133,14 +133,14 @@ export default {
 </script>
 
 <style>
-.ar-container1 {
+.ar-container {
   width: 100%;
   height: 100vh;
   background-color: #000;
   position: relative;
 }
 
-.ar-container1 a[rel="ar"] {
+.ar-container a[rel="ar"] {
   display: block;
   width: 100%;
   height: 100%;
