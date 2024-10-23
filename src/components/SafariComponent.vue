@@ -1,5 +1,5 @@
 <template>
-  <div ref="arContainer" class="ar-container"></div>
+  <div ref="arContainer1" class="ar-container1"></div>
 </template>
 
 <script>
@@ -48,7 +48,7 @@ export default {
 
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(ARButton.createButton(renderer));
-      this.$refs.arContainer.appendChild(renderer.domElement);
+      this.$refs.arContainer1.appendChild(renderer.domElement);
 
       const light = new THREE.DirectionalLight(0xffffff, 1);
       light.position.set(1, 1, 1).normalize();
@@ -92,14 +92,14 @@ export default {
 </script>
 
 <style>
-.ar-container {
+.ar-container1 {
   width: 100%;
   height: 30vh;
   background-color: #000;
   position: relative;
 }
 
-.ar-container a[rel="ar"] {
+.ar-container1 a[rel="ar"] {
   display: block;
   width: 100%;
   height: 100%;
