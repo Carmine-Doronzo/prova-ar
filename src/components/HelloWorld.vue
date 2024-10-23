@@ -1,11 +1,11 @@
 <template>
   <div ref="arContainer" class="ar-container">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" renderer="logarithmicDepthBuffer: true">
-      <!-- Cubo che appare in un'area immaginaria -->
-      <a-box position="0 0 -2" rotation="0 45 0" color="#4CC3D0" scale="0.5 0.5 0.5"></a-box>
-      <a-entity camera></a-entity>
-      <a-light type="directional" position="1 1 1"></a-light>
-    </a-scene>
+  <a-box position="0 0 -2" rotation="0 45 0" color="#4CC3D0" scale="0.5 0.5 0.5"></a-box>
+  <a-entity camera></a-entity>
+  <a-light type="directional" position="1 1 1"></a-light>
+</a-scene>
+
   </div>
 </template>
 
