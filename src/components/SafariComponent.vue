@@ -47,7 +47,7 @@
   <style>
   .ar-container {
     width: 100%;
-    height: 100vh;
+    height: 30vh;
     background-color: #000;
     display: flex;
     justify-content: center;
