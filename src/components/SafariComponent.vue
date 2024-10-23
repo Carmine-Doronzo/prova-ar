@@ -18,18 +18,24 @@ export default {
     };
   },
   mounted() {
-    if (window.navigator.xr) {
+    if (this.isChromeOnAndroid()) {
       this.initAR(); // Utilizza WebXR per i browser compatibili
     } else if (this.isIOS()) {
       this.showARQuickLook(); // Fallback per Safari iOS
     } else {
-      console.console.warn
-      ('AR non supportato su questo browser.');
+      console.warn
+        ('AR non supportato su questo browser.');
     }
   },
   methods: {
     isIOS() {
       return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    },
+    isChromeOnAndroid() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isAndroid = userAgent.includes("android");
+      const isChrome = userAgent.includes("chrome") && !userAgent.includes("edg"); // Esclude Edge che può usare lo stesso user agent
+      return isAndroid && isChrome;
     },
     showARQuickLook() {
       const usdzLink = '/skull-mug.usdz'; // Percorso del file .usdz
@@ -40,7 +46,7 @@ export default {
       document.body.appendChild(anchor);
       anchor.click(); // Simula un clic per avviare l'AR
     },
-    
+
     initAR() {
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -85,7 +91,7 @@ export default {
       };
       animate();
     },
-    
+
     // Altri metodi come onSelectStart, updateModelPosition, updateModelRotation, ecc.
   },
 };

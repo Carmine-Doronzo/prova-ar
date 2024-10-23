@@ -10,10 +10,10 @@ export default{
 </script>
 
 <template>
-  <h1>safari</h1>
+  <!-- <h1>safari</h1> -->
   <SafariComponent/>
-  <h1>chrome</h1>
-  <HelloWorld/>
+  <!-- <h1>chrome</h1>
+  <HelloWorld/> -->
 </template>
 
 <style>
