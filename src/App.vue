@@ -1,14 +1,18 @@
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import safaricomponent from './components/safaricomponent.vue'
 export default{
   components: {
     HelloWorld,
+    safaricomponent
   },
 }
 </script>
 
 <template>
-  
+  <h1>safari</h1>
+  <safaricomponent/>
+  <h1>chrome</h1>
   <HelloWorld/>
 </template>
 
