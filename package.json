@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@types/three": "^0.169.0",
-    "aframe": "^1.6.0",
-    "ar.js": "^2.2.2",
     "mind-ar": "^1.2.5",
     "three": "^0.169.0",
     "vue": "^3.5.10"
