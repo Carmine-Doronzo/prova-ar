@@ -13,23 +13,25 @@ export default {
     return {
       mesh: null,
       isSqueezing: false,
-      initialPosition: null,
-      initialRotation: null,
     };
   },
   mounted() {
-    if (window.navigator.xr) {
-      this.initAR(); // Utilizza WebXR per i browser compatibili
+    if (navigator.xr) {
+      // Chrome (Android) e altri browser con supporto WebXR
+      this.initAR();
     } else if (this.isIOS()) {
-      this.showARQuickLook(); // Fallback per Safari iOS
+      // Safari (iOS) con fallback su AR Quick Look
+      this.showARQuickLook();
     } else {
-      alert('AR non supportato su questo browser.');
+      alert('AR non supportato su questo dispositivo o browser.');
     }
   },
   methods: {
+    // Rileva se l'utente è su iOS
     isIOS() {
       return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     },
+    // Fallback per Safari (iOS) con AR Quick Look
     showARQuickLook() {
       const usdzLink = '/skull_mug.usdz'; // Percorso del file .usdz
       const anchor = document.createElement('a');
@@ -37,9 +39,9 @@ export default {
       anchor.setAttribute('href', usdzLink);
       anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
       document.body.appendChild(anchor);
-      anchor.click(); // Simula un clic per avviare l'AR
+      anchor.click(); // Simula un clic per avviare AR Quick Look
     },
-    
+    // Inizializza WebXR per i browser compatibili
     initAR() {
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -53,6 +55,7 @@ export default {
       light.position.set(1, 1, 1).normalize();
       scene.add(light);
 
+      // Carica il modello STL
       const loader = new STLLoader();
       loader.load('/skull_mug.stl', (geometry) => {
         const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
@@ -74,18 +77,31 @@ export default {
 
       const animate = () => {
         renderer.setAnimationLoop(() => {
-          if (this.isSqueezing) {
-            this.updateModelScale();
-            this.updateModelPosition(controller);
-            this.updateModelRotation(controller);
-          }
           renderer.render(scene, camera);
         });
       };
       animate();
     },
-    
-    // Altri metodi come onSelectStart, updateModelPosition, updateModelRotation, ecc.
+    onSelectStart(event) {
+      const controller = event.target;
+      if (this.mesh) {
+        this.mesh.position.copy(controller.position);
+        this.mesh.visible = true;
+      }
+    },
+    onSqueezeStart() {
+      this.isSqueezing = true;
+    },
+    onSqueezeEnd() {
+      this.isSqueezing = false;
+    },
+    updateModelScale() {
+      if (this.isSqueezing) {
+        this.mesh.scale.multiplyScalar(0.05);
+      } else {
+        this.mesh.scale.multiplyScalar(0.1);
+      }
+    },
   },
 };
 </script>
@@ -95,7 +111,6 @@ export default {
   width: 100%;
   height: 100vh;
   background-color: #000;
-  position: relative;
 }
 
 .ar-container a[rel="ar"] {
