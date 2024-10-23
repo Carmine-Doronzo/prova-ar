@@ -32,7 +32,7 @@ export default {
       return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     },
     showARQuickLook() {
-      const usdzLink = '/path/to/your-model.usdz'; // Percorso del file .usdz
+      const usdzLink = '/skull-mug.usdz'; // Percorso del file .usdz
       const anchor = document.createElement('a');
       anchor.setAttribute('rel', 'ar');
       anchor.setAttribute('href', usdzLink);
