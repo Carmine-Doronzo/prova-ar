@@ -1,5 +1,6 @@
 <template>
   <div ref="arContainer" class="ar-container"></div>
+  <div v-if="!isMobile" ref="canvasContainer" class="canvas-container"></div>
 </template>
 
 <script>
@@ -15,18 +16,24 @@ export default {
       isSqueezing: false,
       initialPosition: null,
       initialRotation: null,
+      isMobile: false,
     };
   },
   mounted() {
+    this.isMobile = this.checkIfMobile();
+    
     if (window.navigator.xr) {
-      this.initAR(); // Utilizza WebXR per i browser compatibili
+      this.initAR(); // Usa WebXR per browser compatibili
     } else if (this.isIOS()) {
-      this.showARQuickLook(); // Fallback per Safari iOS
+      this.showARQuickLook(); // Fallback per Safari su iOS
     } else {
-      alert('AR non supportato su questo browser.');
+      this.init3DCanvas(); // Visualizza modello 3D nel canvas se non è un dispositivo mobile
     }
   },
   methods: {
+    checkIfMobile() {
+      return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    },
     isIOS() {
       return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     },
@@ -37,18 +44,18 @@ export default {
       anchor.setAttribute('href', usdzLink);
       anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
       document.body.appendChild(anchor);
-      anchor.click(); // Simula un clic per avviare l'AR
+      anchor.click();
     },
     
     initAR() {
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-
+      
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(ARButton.createButton(renderer));
       this.$refs.arContainer.appendChild(renderer.domElement);
-
+      
       const light = new THREE.DirectionalLight(0xffffff, 1);
       light.position.set(1, 1, 1).normalize();
       scene.add(light);
@@ -85,13 +92,50 @@ export default {
       animate();
     },
     
+    init3DCanvas() {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      this.$refs.canvasContainer.appendChild(renderer.domElement);
+
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(1, 1, 1).normalize();
+      scene.add(light);
+
+      const loader = new STLLoader();
+      loader.load('/skull_mug.stl', (geometry) => {
+        const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.scale.set(0.01, 0.01, 0.01); // Scala più grande per il canvas 3D
+        scene.add(this.mesh);
+      });
+
+      const animate = () => {
+        requestAnimationFrame(animate);
+        this.mesh.rotation.x += 0.01;
+        this.mesh.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      };
+      animate();
+    },
+    
     // Altri metodi come onSelectStart, updateModelPosition, updateModelRotation, ecc.
   },
 };
 </script>
 
+
 <style>
 .ar-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #000;
+  position: relative;
+}
+
+.canvas-container {
   width: 100%;
   height: 100vh;
   background-color: #000;
