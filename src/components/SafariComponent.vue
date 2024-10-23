@@ -1,57 +1,108 @@
 <template>
-    <div ref="arContainer" class="ar-container">
-      <a href="javascript:void(0)" @click="openAR" v-if="isSafari">
-        apri AR
-      </a>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'ARComponent',
-    data() {
-      return {
-        modelUrl: '/skull_mug.usdz', // Assicurati di avere il tuo modello in formato USDZ
-        isSafari: false,
+  <div ref="arContainer" class="ar-container"></div>
+</template>
+
+<script>
+import * as THREE from 'three';
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
+
+export default {
+  name: 'ARComponent',
+  data() {
+    return {
+      mesh: null,
+      isSqueezing: false,
+      initialPosition: null,
+      initialRotation: null,
+    };
+  },
+  mounted() {
+    if (window.navigator.xr) {
+      this.initAR(); // Utilizza WebXR per i browser compatibili
+    } else if (this.isIOS()) {
+      this.showARQuickLook(); // Fallback per Safari iOS
+    } else {
+      console.console.warn
+      ('AR non supportato su questo browser.');
+    }
+  },
+  methods: {
+    isIOS() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    },
+    showARQuickLook() {
+      const usdzLink = '/path/to/your-model.usdz'; // Percorso del file .usdz
+      const anchor = document.createElement('a');
+      anchor.setAttribute('rel', 'ar');
+      anchor.setAttribute('href', usdzLink);
+      anchor.innerHTML = `<img src="${usdzLink}" alt="Visualizza in AR" style="display:none;">`;
+      document.body.appendChild(anchor);
+      anchor.click(); // Simula un clic per avviare l'AR
+    },
+    
+    initAR() {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(ARButton.createButton(renderer));
+      this.$refs.arContainer.appendChild(renderer.domElement);
+
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(1, 1, 1).normalize();
+      scene.add(light);
+
+      const loader = new STLLoader();
+      loader.load('/watchstand_newV.stl', (geometry) => {
+        const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.scale.set(0.001, 0.001, 0.001);
+        this.mesh.visible = false;
+        this.mesh.position.set(0, 0, -10);
+        scene.add(this.mesh);
+      });
+
+      renderer.xr.enabled = true;
+      const controller = renderer.xr.getController(0);
+      scene.add(controller);
+
+      controller.addEventListener('selectstart', this.onSelectStart);
+      controller.addEventListener('selectend', this.onSelectEnd);
+      controller.addEventListener('squeezestart', this.onSqueezeStart);
+      controller.addEventListener('squeezeend', this.onSqueezeEnd);
+
+      const animate = () => {
+        renderer.setAnimationLoop(() => {
+          if (this.isSqueezing) {
+            this.updateModelScale();
+            this.updateModelPosition(controller);
+            this.updateModelRotation(controller);
+          }
+          renderer.render(scene, camera);
+        });
       };
+      animate();
     },
-    mounted() {
-      this.isSafari = this.checkSafari();
-      if (!this.isSafari) {
-        console.warn('AR non supportato in questo browser. Utilizza Safari.');
-      }
-    },
-    methods: {
-      checkSafari() {
-        return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      },
-  
-      openAR() {
-        const anchor = document.createElement('a-entity');
-        anchor.setAttribute('href', this.modelUrl);
-        anchor.setAttribute('rel', 'ar');
-        anchor.setAttribute('style', 'display: none;');
-  
-        // Posizionamento: 50 cm dalla telecamera e dimensioni dell'area 50 cm x 50 cm
-        anchor.setAttribute('position', '0 0 -0.5');
-        anchor.setAttribute('scale', '0.1 0.1 0.1'); // Dimensioni in scala per 50 cm
-  
-        document.body.appendChild(anchor);
-        anchor.click(); // Simula un clic per aprire AR Quick Look
-        document.body.removeChild(anchor); // Rimuove l'ancora dopo l'uso
-      },
-    },
-  };
-  </script>
-  
-  <style>
-  .ar-container {
-    width: 100%;
-    height: 30vh;
-    background-color: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  </style>
-  
+    
+    // Altri metodi come onSelectStart, updateModelPosition, updateModelRotation, ecc.
+  },
+};
+</script>
+
+<style>
+.ar-container {
+  width: 100%;
+  height: 30vh;
+  background-color: #000;
+  position: relative;
+}
+
+.ar-container a[rel="ar"] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+</style>
