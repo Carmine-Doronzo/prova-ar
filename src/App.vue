@@ -1,17 +1,17 @@
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import safaricomponent from './components/safaricomponent.vue'
+import SafariComponent from './components/SafariComponent.vue'
 export default{
   components: {
     HelloWorld,
-    safaricomponent
+    SafariComponent
   },
 }
 </script>
 
 <template>
   <h1>safari</h1>
-  <safaricomponent/>
+  <SafariComponent/>
   <h1>chrome</h1>
   <HelloWorld/>
 </template>

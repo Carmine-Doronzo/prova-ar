@@ -1,7 +1,7 @@
 <template>
     <div ref="arContainer" class="ar-container">
       <a href="javascript:void(0)" @click="openAR" v-if="isSafari">
-        <img src="/path/to/your/3d-icon.png" alt="Apri AR" />
+        apri AR
       </a>
     </div>
   </template>
